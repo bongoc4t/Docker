@@ -47,4 +47,21 @@ docker logs CONTAINER #show logs of a container
         diff CONTAINER #show all modified files in container
         port CONTAINER #show mapped ports of a container
 
-#- NETWORKING -#
+#-DOCKER SWARM-# 
+#SWARM
+docker swarm init #to init Swarm Orchestration
+       swarm init --advertise-addr X.X.X.X #advertise the IP address and can be done with ports X.X.X.X:YY
+       swarm join --token TOKEN X.X.X.X #to add a worker
+       swarm join-token manager #create a token to setup a node as a manager
+       node update --role ROLE NODE_NAME #update a role from a worker to 
+#MANAGE SWARM
+docker service create <image>
+       service create --name NAME --replicas XX IMAGE #create image with NAME and requested replicas
+       service update CONTAINER_NAME --replicas XX #update container with XX replicas
+       service rm <service id|name> #remove service
+       service ls #list all services
+       service ps <service id|name> #list all tasks for given service (includes shutdown/failed)
+       service ps --filter desired-state=running <service id|name> #list running (acitve) tasks for given service
+       service logs --follow SERVICE_ID/NAME #print console log of a service
+       create network --overlay NAME #create an overlay network
+#STACKS > basically docker-compose files for production swarm
