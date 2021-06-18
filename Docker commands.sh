@@ -54,6 +54,33 @@ docker login
        diff CONTAINER #show all modified files in container
        port CONTAINER #show mapped ports of a container
 
+#- DOCKER NETWORKING-#
+docker network ls #list all networks available
+               create #create a new network
+               connect CUSTOM_NETWORK CONTAINER #connect the container to custom network
+               disconnect CUSTOM_NETWORK CONTAINER #disconnect
+               prune #remove all networks
+               rm CUSTOM_NETWORK #remove custom network
+       inspect CONTAINER_NAME -f "{{json .NetworkSettings.Networks }}" | python -m json.tool #locate network of specific container
+       
+
+#- DOCKER NAMESPACES -#
+ip netns add NSNAME #create a namespace
+ip netns exec NSNAME ip link #check the namespace network
+ip link add VETH-NSNAME type veth peer name VETH-NSNAME2 #to create a "pipe" between 2 namespaces
+ip link set VETH-NSNAME netns red #attach the virtual interface to the namespace
+ip link add VIRTUAL_NET type bridge
+ip link set dev VIRTUAL_NET up/down #bring the virtual switch up or down
+ip -n NSNAME link del VET-NSNAME #
+ip -n NSNAME addr add X.X.X.X dev VETH-NSNAME #attach a IP addres to the virtual interface
+ip -n NSNAME link set VETH-NSNAME up/down #bring the virtual interface IP up or down
+
+ip netns exec NSNAME ping X.X.X.X 
+ip netns exec NSNAME arp
+
+
+
+
 #-DOCKER SWARM-# 
 #SWARM
 docker swarm init #to init Swarm Orchestration
@@ -72,6 +99,8 @@ docker service create <image>
        service logs --follow SERVICE_ID/NAME #print console log of a service
        create network --overlay NAME #create an overlay network
 #STACKS > basically docker-compose files for production swarm
+
+
 
 #-DOCKERFILE-#
 FROM #start from a base OS/Image
