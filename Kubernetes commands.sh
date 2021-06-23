@@ -47,10 +47,13 @@ persis­­te­n­t­vo­­lum­­eclaim -> Request for storage (for a Persi­­s
 ingress -> is a collection of rules that allow inbound connec­­tions to reach the cluster services.
 
 #-NOTES
-minikube start --driver=virtualbox #to start minikube in virtualbox
 minikube start
 minikube stop
 minikube delete #in case you get "machine does not exist" to clear the minikube local state
+minikube start --driver=virtualbox #to start minikube in virtualbox
+minikube start --nodes X -p NAME_MULTINODE 
+
+kubectl get all #get all the deployment, ReplicaSets and Pods created
 
 kubectl run POD --image=IMAGE #create a pod. From v1.18 th command only creates a pod instead of deployment
 kubectl create deployment POD --image=IMAGE #create a pod and a deployment for it
