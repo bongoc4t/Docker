@@ -1,5 +1,5 @@
 # https://jfrog.com/knowledge-base/a-beginners-guide-to-understanding-and-building-docker-images/ -> basic Docker understanding
-
+Docker Structure: /var/lib/docker
 
 #-RUN A NEW CONTAINER-#
 docker container run IMAGE #start a new container from an image
@@ -23,8 +23,10 @@ docker container ps #list all the running the containers
                 exec -it CONTAINER bash #start a shell inside a running container
                 rename OLD_NAME NEW_NAME #rename a container
                 inspect CONTAINER_NAME #inspect the container file
-                inspect -f '{{.HostConfig.LogConfig.Type}}' CONTAINER_NAME #to find the current logging driver for a running container
-
+                
+#-MANAGE CONTAINERS JSON FILTERS-#
+docker container inspect -f '{{.NetworkSettings.Networks.bridge.IPAddress}}' CONTAINER_NAME #find the ip address
+                 inspect -f '{{.HostConfig.LogConfig.Type}}' CONTAINER_NAME #to find the current logging driver for a running container
 
 #-MANAGE IMAGES-#
 docker image  pull IMAGE #download an image
@@ -63,23 +65,6 @@ docker network ls #list all networks available
                rm CUSTOM_NETWORK #remove custom network
        inspect CONTAINER_NAME -f "{{json .NetworkSettings.Networks }}" | python -m json.tool #locate network of specific container
        
-
-#- DOCKER NAMESPACES -#
-ip netns add NSNAME #create a namespace
-ip netns exec NSNAME ip link #check the namespace network
-ip link add VETH-NSNAME type veth peer name VETH-NSNAME2 #to create a "pipe" between 2 namespaces
-ip link set VETH-NSNAME netns red #attach the virtual interface to the namespace
-ip link add VIRTUAL_NET type bridge
-ip link set dev VIRTUAL_NET up/down #bring the virtual switch up or down
-ip -n NSNAME link del VET-NSNAME #
-ip -n NSNAME addr add X.X.X.X dev VETH-NSNAME #attach a IP addres to the virtual interface
-ip -n NSNAME link set VETH-NSNAME up/down #bring the virtual interface IP up or down
-
-ip netns exec NSNAME ping X.X.X.X 
-ip netns exec NSNAME arp
-
-
-
 
 #-DOCKER SWARM-# 
 #SWARM
